@@ -1,6 +1,6 @@
 ---
 name: youtube-automation-competitor-analysis
-description: The foundation of building a faceless YouTube automation channel from scratch, as one large workflow from competitor analysis and channel setup to the master prompt and the first video's script. Analyzes a new YouTube competitor channel end to end (collects the data automatically, builds a channel identity card with a genre guess first, then niche, language gap, titles, thumbnails, scripts, reading level, CTAs and a comparison with your own channel), pulls the questions for a master prompt out of the competitor, then writes the master prompt and audits it in rounds. Use when someone says "analyze this competitor", "new channel analysis" or "prepare a master prompt from this competitor".
+description: A complete workflow for building a faceless YouTube automation channel from the ground up, from competitor analysis and channel setup to an audited master prompt and the script of the first video. Analyzes a new YouTube competitor channel end to end (collects the data automatically, builds a channel identity card with a genre guess first, then niche, language gap, titles, thumbnails, scripts, reading level, CTAs and a comparison with your own channel), pulls the questions for a master prompt out of the competitor, then writes the master prompt and audits it in rounds. Use when someone says "analyze this competitor", "new channel analysis" or "prepare a master prompt from this competitor".
 ---
 
 # YouTube Automation Competitor Analysis and Master Prompt

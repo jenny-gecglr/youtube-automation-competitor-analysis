@@ -2,7 +2,7 @@
 
 ![YouTube Automation Competitor Analysis](assets/banner.jpg)
 
-> The foundation of building a faceless YouTube automation channel from scratch: one large workflow that takes you from a competitor's link, through channel setup, to the master prompt and the first video's script. You analyze a competitor without collecting anything by hand, then turn what you learn into an audited master prompt. The data pack is built by script, the cheap tools do the heavy reading, and every cheap-tool job is checked by code or by an independent strong-model pass, with unchecked claims labeled as such.
+> Build a faceless YouTube automation channel from the ground up. One end-to-end workflow takes you from a competitor's link to a channel setup, an audited master prompt and the script of your first video. A script collects the data, cheap tools do the heavy reading, and every cheap-tool job is checked by code or by an independent strong-model pass, with unchecked claims labeled as such.
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Claude Code skill](https://img.shields.io/badge/Claude%20Code-skill-blueviolet)
