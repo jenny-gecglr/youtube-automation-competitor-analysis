@@ -83,9 +83,9 @@ flowchart TD
     B5 --> B3["B3 Master prompt written by the strong model"]
     B3 --> R["B6 Audit round: Python master check + fresh zero-context checker"]
     R --> FIX["Fix findings"]
-    FIX --> R2{"No CRITICAL left, or 3 rounds done?"}
-    R2 -- "no" --> R
-    R2 -- "yes" --> G6{"You approve the open points"}
+    FIX --> R2{"CRITICAL findings left and fewer than 3 rounds?"}
+    R2 -- "yes" --> R
+    R2 -- "no" --> G6{"You approve the open points"}
     G6 --> M["Master prompt ready"]
     classDef base fill:#1F3026,stroke:#8F8E66,color:#C7B3A3,stroke-width:1.5px
     classDef gate fill:#582377,stroke:#A3787B,color:#E6D9CC,stroke-width:1.5px
