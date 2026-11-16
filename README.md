@@ -171,7 +171,7 @@ Everything below is checked on the first run; the skill asks before installing a
 ## Install
 
 ```bash
-git clone https://github.com/jenny-gecglr/youtube-automation-competitor-analysis.git ~/.claude/skills/youtube-automation-competitor-analysis
+git clone https://github.com/jenny-gecglr/youtube-automation-competitor-analysis-full.git ~/.claude/skills/youtube-automation-competitor-analysis
 ```
 
 Or download the folder and place it at `~/.claude/skills/youtube-automation-competitor-analysis`.
