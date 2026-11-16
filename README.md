@@ -2,7 +2,7 @@
 
 ![YouTube Automation Competitor Analysis](assets/banner.jpg)
 
-> Analyze a YouTube competitor without collecting anything by hand, then turn what you learn into an audited master prompt. The data pack is built by script, the cheap tools do the heavy reading, and every cheap-tool job is checked by code or by an independent strong-model pass, with unchecked claims labeled as such.
+> The foundation of building a faceless YouTube automation channel from scratch: one large workflow that takes you from a competitor's link, through channel setup, to the master prompt and the first video's script. You analyze a competitor without collecting anything by hand, then turn what you learn into an audited master prompt. The data pack is built by script, the cheap tools do the heavy reading, and every cheap-tool job is checked by code or by an independent strong-model pass, with unchecked claims labeled as such.
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Claude Code skill](https://img.shields.io/badge/Claude%20Code-skill-blueviolet)
@@ -131,13 +131,15 @@ flowchart LR
 
 ## Helper scripts
 
-The skill ships three scripts in `scripts/`. Run them with `python -I -X utf8`.
+The skill ships five scripts in `scripts/`. Run them with `python -I -X utf8`.
 
 | Script | What it does |
 |---|---|
 | `fetch_competitor_data.py` | Lists a channel's most viewed videos with yt-dlp, saves metadata, descriptions, chapters and thumbnails, measures thumbnails with Pillow, and gets verbatim transcripts from a persistent NotebookLM notebook (falls back to yt-dlp subtitles) |
 | `measure_channel_identity.py` | Measures a transcript for the identity card: unique-word ratio, pronoun density, marker densities (lesson, story, analogy, curiosity, caveat), CTA positions in percent, a hook sample and a 10-slice rhythm |
 | `measure_genre_curve.py` | Measures upload frequency, views per day by age, the newer-to-older ratio and the single-video share that hint at the channel's genre |
+| `verify_punctuation_repair.py` | Proves by code that a punctuation repair of a NotebookLM transcript changed no word (the word sequences must be identical) |
+| `measure_reading_level.py` | On the punctuated transcript: sentence-length ratios, average and longest sentence, unique-word ratio, repeated words and an approximate readability formula (Flesch for English, Wiener Sachtextformel for German) |
 
 Example:
 
@@ -211,7 +213,7 @@ Claude: Collecting the 15 most viewed and 3 least viewed videos now. When the
 ## Limitations
 
 - The language scan is a rough first elimination, not decision evidence; the translated-title test decides.
-- NotebookLM's verbatim transcripts have no punctuation, so sentence-length ratios need a punctuation repair first.
+- NotebookLM's verbatim transcripts have no punctuation. The skill repairs the punctuation automatically (a cheap tool adds only punctuation, `verify_punctuation_repair.py` proves no word changed) before it measures sentence lengths, and the readability formulas use estimated syllables, so they are approximate.
 - CTR, average view duration and first-30-second retention cannot be seen on a competitor channel, only on your own.
 - Outlier, VPH, keyword and language-scan steps need a vidIQ account; some video-watching features need a paid plan.
 - The marker lists in `measure_channel_identity.py` are English; edit them for other languages.
