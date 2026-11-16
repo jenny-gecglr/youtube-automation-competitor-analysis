@@ -36,17 +36,85 @@ These are the author's own rules, found by running this analysis on real channel
 
 ## How it works
 
+The workflow has two parts. **Part A** analyzes the competitor, **part B** turns the analysis into an audited master prompt. Purple diamonds are approval gates: nothing moves on without your decision.
+
+### Part A: analyze the competitor
+
 ```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Georgia, serif","primaryColor":"#1F3026","primaryTextColor":"#C7B3A3","primaryBorderColor":"#8F8E66","lineColor":"#8F8E66","tertiaryTextColor":"#C7B3A3","edgeLabelBackground":"#1F3026"}}}%%
+flowchart TD
+    A1["A1 Channel link, target language, scope"] --> A2["A2 Know the channel first: most viewed transcript, reading, code measurement"]
+    A2 --> CARD["Channel identity card + genre guess + competitor definition"]
+    CARD --> G1{"You approve the card?"}
+    G1 -- "no, corrected" --> CARD
+    G1 -- "yes" --> A2B["A2b Data pack by script: 15 most + 3 least viewed, transcripts via NotebookLM, thumbnails"]
+    A2B --> CURVE["Genre confirmed by the views-versus-age curve"]
+    CURVE --> A3["A3 Three layers: own analysis, then NexLev, then vidIQ"]
+    A3 --> LANG["A3b Language and niche: scan, keyword measurement, translated-title test"]
+    LANG --> G2{"You choose the language"}
+    G2 --> DEEP["A4 to A9 Titles, thumbnails, scripts, in-video look, reading level, CTAs, comparison"]
+    DEEP --> RULES["A11 Rules list, each rule checked against the competitor"]
+    RULES --> G3{"You approve the rules list?"}
+    G3 -- "yes" --> PART_B["Part B"]
+    CHK["Every cheap-tool job: first check by a different tool or code, final check by the strong model"] -.-> A2B
+    CHK -.-> LANG
+    CHK -.-> DEEP
+    classDef base fill:#1F3026,stroke:#8F8E66,color:#C7B3A3,stroke-width:1.5px
+    classDef gate fill:#582377,stroke:#A3787B,color:#E6D9CC,stroke-width:1.5px
+    classDef tool fill:#C7B3A3,stroke:#8F8E66,color:#1D0C15,stroke-width:1.5px
+    classDef out fill:#77732C,stroke:#C7B3A3,color:#F2E8DD,stroke-width:1.5px
+    class A1,A2,A2B,CURVE,A3,LANG,DEEP,RULES base
+    class G1,G2,G3 gate
+    class CARD,PART_B out
+    class CHK tool
+```
+
+### Part B: from analysis to an audited master prompt
+
+```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Georgia, serif","primaryColor":"#1F3026","primaryTextColor":"#C7B3A3","primaryBorderColor":"#8F8E66","lineColor":"#8F8E66","tertiaryTextColor":"#C7B3A3","edgeLabelBackground":"#1F3026"}}}%%
+flowchart TD
+    B1["B1 Rules list and genre approved, language decided"] --> B1B["B1b Topics and competitor videos ranked by Outlier and VPH"]
+    B1B --> B1C["B1c Main-concept keyword measurement"]
+    B1C --> G4{"You approve the titles?"}
+    G4 --> B2["B2 Question form filled from the competitor: measured value, suggestion, your decision"]
+    B2 --> G5{"You fill in the form"}
+    G5 --> B5["B5 Checker tools generated per channel + rule matrix + self-test"]
+    B5 --> B3["B3 Master prompt written by the strong model"]
+    B3 --> R["B6 Audit round: Python master check + fresh zero-context checker"]
+    R --> FIX["Fix findings"]
+    FIX --> R2{"No CRITICAL left, or 3 rounds done?"}
+    R2 -- "no" --> R
+    R2 -- "yes" --> G6{"You approve the open points"}
+    G6 --> M["Master prompt ready"]
+    classDef base fill:#1F3026,stroke:#8F8E66,color:#C7B3A3,stroke-width:1.5px
+    classDef gate fill:#582377,stroke:#A3787B,color:#E6D9CC,stroke-width:1.5px
+    classDef out fill:#77732C,stroke:#C7B3A3,color:#F2E8DD,stroke-width:1.5px
+    class B1,B1B,B1C,B2,B5,B3,R,FIX base
+    class G4,G5,R2,G6 gate
+    class M out
+```
+
+### Inside the master: the script quality loop
+
+Every script written under the master goes through this loop (B3):
+
+```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Georgia, serif","primaryColor":"#1F3026","primaryTextColor":"#C7B3A3","primaryBorderColor":"#8F8E66","lineColor":"#8F8E66","tertiaryTextColor":"#C7B3A3","edgeLabelBackground":"#1F3026"}}}%%
 flowchart LR
-    A["Channel link"] --> B["Identity card + genre guess"]
-    B --> C{"Approved?"}
-    C -- "yes" --> D["Data pack: titles, transcripts, thumbnails"]
-    D --> E["Analysis: titles, thumbnails, scripts, level, CTA"]
-    E --> F["Language gap + topic scoring"]
-    F --> G["Question form filled from the competitor"]
-    G --> H["Master prompt + checker tool"]
-    H --> I["Up to 3 audit rounds"]
-    C -- "no" --> B
+    H["Hook"] --> HK{"You say hook ok"}
+    HK --> W["1 Script written by the strong model"]
+    W --> C1["2 Python check"]
+    C1 --> C2["3 Zero-context compliance check"]
+    C2 --> F["4 Surgical fix"]
+    F --> C3["5 Re-check with a new checker, at most 3 rounds"]
+    C3 --> O["6 Originality: overlap with earlier scripts and competitor"]
+    O --> J["7 Final judge runs the code itself: OK or RED"]
+    J --> U{"You approve the script with the check report"}
+    classDef base fill:#1F3026,stroke:#8F8E66,color:#C7B3A3,stroke-width:1.5px
+    classDef gate fill:#582377,stroke:#A3787B,color:#E6D9CC,stroke-width:1.5px
+    class H,W,C1,C2,F,C3,O,J base
+    class HK,U gate
 ```
 
 ## What you get
