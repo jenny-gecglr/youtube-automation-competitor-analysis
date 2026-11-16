@@ -1,6 +1,6 @@
-# YouTube Competitor Analysis
+# YouTube Automation Competitor Analysis
 
-![YouTube Competitor Analysis](assets/banner.jpg)
+![YouTube Automation Competitor Analysis](assets/banner.jpg)
 
 > Analyze a YouTube competitor without collecting anything by hand, then turn what you learn into an audited master prompt. The data pack is built by script, the cheap tools do the heavy reading, and every cheap-tool job is checked by code or by an independent strong-model pass, with unchecked claims labeled as such.
 
@@ -169,10 +169,10 @@ Everything below is checked on the first run; the skill asks before installing a
 ## Install
 
 ```bash
-git clone https://github.com/jenny-gecglr/youtube-competitor-analysis.git ~/.claude/skills/youtube-competitor-analysis
+git clone https://github.com/jenny-gecglr/youtube-automation-competitor-analysis.git ~/.claude/skills/youtube-automation-competitor-analysis
 ```
 
-Or download the folder and place it at `~/.claude/skills/youtube-competitor-analysis`.
+Or download the folder and place it at `~/.claude/skills/youtube-automation-competitor-analysis`.
 
 ## Example prompts
 
