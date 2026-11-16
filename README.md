@@ -56,17 +56,17 @@ flowchart TD
     DEEP --> RULES["A11 Rules list, each rule checked against the competitor"]
     RULES --> G3{"You approve the rules list?"}
     G3 -- "yes" --> PART_B["Part B"]
-    CHK["Every cheap-tool job: first check by a different tool or code, final check by the strong model"] -.-> A2B
-    CHK -.-> LANG
-    CHK -.-> DEEP
-    classDef base fill:#1F3026,stroke:#8F8E66,color:#C7B3A3,stroke-width:1.5px
-    classDef gate fill:#582377,stroke:#A3787B,color:#E6D9CC,stroke-width:1.5px
-    classDef tool fill:#C7B3A3,stroke:#8F8E66,color:#1D0C15,stroke-width:1.5px
-    classDef out fill:#77732C,stroke:#C7B3A3,color:#F2E8DD,stroke-width:1.5px
-    class A1,A2,A2B,CURVE,A3,LANG,DEEP,RULES base
-    class G1,G2,G3 gate
-    class CARD,PART_B out
-    class CHK tool
+    CHECK["Every cheap-tool job: first check by a different tool or code, final check by the strong model"] -.-> A2B
+    CHECK -.-> LANG
+    CHECK -.-> DEEP
+    classDef cBase fill:#1F3026,stroke:#8F8E66,color:#C7B3A3,stroke-width:1.5px
+    classDef cGate fill:#582377,stroke:#A3787B,color:#E6D9CC,stroke-width:1.5px
+    classDef cTool fill:#C7B3A3,stroke:#8F8E66,color:#1D0C15,stroke-width:1.5px
+    classDef cOut fill:#77732C,stroke:#C7B3A3,color:#F2E8DD,stroke-width:1.5px
+    class A1,A2,A2B,CURVE,A3,LANG,DEEP,RULES cBase
+    class G1,G2,G3 cGate
+    class CARD,PART_B cOut
+    class CHECK cTool
 ```
 
 ### Part B: from analysis to an audited master prompt
@@ -87,12 +87,12 @@ flowchart TD
     R2 -- "yes" --> R
     R2 -- "no" --> G6{"You approve the open points"}
     G6 --> M["Master prompt ready"]
-    classDef base fill:#1F3026,stroke:#8F8E66,color:#C7B3A3,stroke-width:1.5px
-    classDef gate fill:#582377,stroke:#A3787B,color:#E6D9CC,stroke-width:1.5px
-    classDef out fill:#77732C,stroke:#C7B3A3,color:#F2E8DD,stroke-width:1.5px
-    class B1,B1B,B1C,B2,B5,B3,R,FIX base
-    class G4,G5,R2,G6 gate
-    class M out
+    classDef cBase fill:#1F3026,stroke:#8F8E66,color:#C7B3A3,stroke-width:1.5px
+    classDef cGate fill:#582377,stroke:#A3787B,color:#E6D9CC,stroke-width:1.5px
+    classDef cOut fill:#77732C,stroke:#C7B3A3,color:#F2E8DD,stroke-width:1.5px
+    class B1,B1B,B1C,B2,B5,B3,R,FIX cBase
+    class G4,G5,R2,G6 cGate
+    class M cOut
 ```
 
 ### Inside the master: the script quality loop
@@ -111,10 +111,10 @@ flowchart LR
     C3 --> O["6 Originality: overlap with earlier scripts and competitor"]
     O --> J["7 Final judge runs the code itself: OK or RED"]
     J --> U{"You approve the script with the check report"}
-    classDef base fill:#1F3026,stroke:#8F8E66,color:#C7B3A3,stroke-width:1.5px
-    classDef gate fill:#582377,stroke:#A3787B,color:#E6D9CC,stroke-width:1.5px
-    class H,W,C1,C2,F,C3,O,J base
-    class HK,U gate
+    classDef cBase fill:#1F3026,stroke:#8F8E66,color:#C7B3A3,stroke-width:1.5px
+    classDef cGate fill:#582377,stroke:#A3787B,color:#E6D9CC,stroke-width:1.5px
+    class H,W,C1,C2,F,C3,O,J cBase
+    class HK,U cGate
 ```
 
 ## What you get
