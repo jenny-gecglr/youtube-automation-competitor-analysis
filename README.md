@@ -10,6 +10,10 @@
 
 **Contents:** [Why](#why-this-exists) · [What makes it different](#what-makes-it-different) · [How it works](#how-it-works) · [What you get](#what-you-get) · [Helper scripts](#helper-scripts) · [Reference](#reference) · [Requirements](#requirements) · [Install](#install) · [Example prompts](#example-prompts) · [Example conversation](#example-conversation) · [FAQ](#faq) · [Limitations](#limitations) · [Credits](#credits) · [License](#license)
 
+## What's new in v1.2.0
+
+- **Rules from the minute-by-minute analysis (A6d).** A mandatory step before the master is written: every finding is sorted into three boxes (already in the master and confirmed, disproved, a new mechanism), the user picks which rule candidates to keep, only the mechanism is taken (never the competitor's visuals or wording), and approved rules go into the master with tags.
+
 ## What's new in v1.1.0
 
 - **Minute-by-minute video analysis (A6c).** Watch the competitor's most viewed video locally with Gemini CLI (no vidIQ needed): the video is downloaded at 480p, split into pieces of about 4:20, and each piece is turned into a table of time, narration, on-screen content and transition. A three-tier check (frame comparison, sound measured by code, a full read by the strong model) guards it, and the known limits are written down.
