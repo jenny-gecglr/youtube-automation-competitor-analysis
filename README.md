@@ -10,6 +10,11 @@
 
 **Contents:** [Why](#why-this-exists) · [What makes it different](#what-makes-it-different) · [How it works](#how-it-works) · [What you get](#what-you-get) · [Helper scripts](#helper-scripts) · [Reference](#reference) · [Requirements](#requirements) · [Install](#install) · [Example prompts](#example-prompts) · [Example conversation](#example-conversation) · [FAQ](#faq) · [Limitations](#limitations) · [Credits](#credits) · [License](#license)
 
+## What's new in v1.3.0
+
+- **Thumbnail analysis grows to 20 items (A5).** Gemini inspects the thumbnails in detail, a small Claude model spot-checks, and the analysis adds a hand test, a text test, a table of measurable fields, a chronological style-repetition analysis and a title-to-thumbnail-text mapping table that yields formulas for deriving thumbnail text from a title.
+- **Producing your own thumbnails from the report (A5b).** Gemini designs at least 6 concepts, the strong model checks them, ChatGPT produces them in one conversation, and nothing is decided before the user has seen it and done the hand test.
+
 ## What's new in v1.2.0
 
 - **Rules from the minute-by-minute analysis (A6d).** A mandatory step before the master is written: every finding is sorted into three boxes (already in the master and confirmed, disproved, a new mechanism), the user picks which rule candidates to keep, only the mechanism is taken (never the competitor's visuals or wording), and approved rules go into the master with tags.
@@ -132,7 +137,7 @@ flowchart LR
 |---|---|
 | A2 Channel identity | `channel-identity.md`: one-sentence result, evidence, genre guess, competitor definition |
 | A2b Data pack | titles, exact views, descriptions, chapters, thumbnails, verbatim transcripts, an UNAVAILABLE list |
-| A3 to A9 Analysis | title formula and ratios, a 15-point thumbnail analysis, script structure, reading level (CEFR plus measured ratios), CTA table, comparison with your channel |
+| A3 to A9 Analysis | title formula and ratios, a 20-item thumbnail analysis and a step for producing your own thumbnails, script structure, reading level (CEFR plus measured ratios), CTA table, comparison with your channel |
 | A3b Language and niche | a language-gap scan, keyword measurements (Monthly searches, competition color, Keyword Score) and a translated-title test |
 | A10 Channel setup | 10 channel names checked for overlap, a keyword-based description, logo and banner prompts, a video timeline |
 | B1b Topic scoring | topics and competitor videos ranked by Outlier and VPH |
@@ -160,7 +165,7 @@ python -I -X utf8 scripts/fetch_competitor_data.py https://www.youtube.com/@chan
 
 Two long-form files in `reference/` hold the working method behind the skill:
 
-- [reference/method-and-rules.md](reference/method-and-rules.md): the philosophy, the standard questions, what to collect, the full 15-point thumbnail list, the CTA rules, how to validate a master's rules against the competitor, the common mistakes and the reasons behind each rule.
+- [reference/method-and-rules.md](reference/method-and-rules.md): the philosophy, the standard questions, what to collect, the thumbnail detail list (the skill extends it to 20 items), the CTA rules, how to validate a master's rules against the competitor, the common mistakes and the reasons behind each rule.
 - [reference/ready-made-prompts.md](reference/ready-made-prompts.md): the prompts the author really used, for running the steps by hand or in another assistant.
 
 ## Requirements
