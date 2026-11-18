@@ -10,6 +10,10 @@
 
 **Contents:** [Why](#why-this-exists) · [What makes it different](#what-makes-it-different) · [How it works](#how-it-works) · [What you get](#what-you-get) · [Helper scripts](#helper-scripts) · [Reference](#reference) · [Requirements](#requirements) · [Install](#install) · [Example prompts](#example-prompts) · [Example conversation](#example-conversation) · [FAQ](#faq) · [Limitations](#limitations) · [Credits](#credits) · [License](#license)
 
+## What's new in v1.1.0
+
+- **Minute-by-minute video analysis (A6c).** Watch the competitor's most viewed video locally with Gemini CLI (no vidIQ needed): the video is downloaded at 480p, split into pieces of about 4:20, and each piece is turned into a table of time, narration, on-screen content and transition. A three-tier check (frame comparison, sound measured by code, a full read by the strong model) guards it, and the known limits are written down.
+
 ## Why this exists
 
 Studying a competitor channel by hand means opening dozens of videos, copying titles into a sheet, guessing at thumbnails and writing a prompt from memory. Worse, if you scan before you understand the channel, you collect the wrong competitors (in a trial on a physics explainer channel, school and exam channels were counted as rivals because the channel was mistaken for a lesson channel). This skill fixes that order: it identifies the channel first, collects the data itself, measures what can be counted, and only then derives the questions for your master prompt.
@@ -32,6 +36,7 @@ These are the author's own rules, found by running this analysis on real channel
 - **The producer is never the checker.** A pass mark comes only from code output or an independent checker. One wrong sample makes the whole job unreliable.
 - **Transcripts come from NotebookLM, not from paid credits.** A persistent notebook per competitor gives the verbatim text with no model in between.
 - **The master is audited like a script.** The skill tells Claude to build a Python checker calibrated on the competitor's own videos, with a mandatory self-test (the checker is generated per channel, not shipped as a file), and the master goes through up to 3 rounds with a new zero-context checker each time.
+- **Two methods for the video, never one.** The minute-by-minute watch is checked against real frames and a sound measurement by code. In the first run, one tool's "music and sound effects" claim was disproved by the measurement.
 - **You keep the creative links.** Titles, thumbnails and hooks stay yours; the agent never rewrites them, and nothing enters the master without approval.
 
 ## How it works
@@ -165,8 +170,8 @@ Everything below is checked on the first run; the skill asks before installing a
 | NotebookLM CLI (`nlm`) | Verbatim transcripts in a persistent notebook per competitor | `uv tool install notebooklm-mcp-cli` (or `pipx install notebooklm-mcp-cli`), then `nlm login` |
 | vidIQ MCP | Outlier, VPH, keyword research, channel search, video watching | Add the vidIQ MCP server to Claude Code and sign in. Without it, those steps ask you for vidIQ screenshots |
 | NexLev MCP (optional) | A second source for outliers | Add the NexLev MCP server and sign in |
-| Gemini CLI or Codex CLI (optional) | Cheap first checks and drafts | Install and sign in. Without them, a small Claude model does those jobs |
-| Whisper and ffmpeg (fallback only) | Transcripts that NotebookLM cannot get | Installed only if needed, after asking |
+| Gemini CLI or Codex CLI (optional) | Cheap first checks and drafts; Gemini CLI also watches a local video file for the minute-by-minute analysis | Install and sign in. Without them, a small Claude model does those jobs |
+| ffmpeg (when needed) | Splitting a local video and measuring sound for the minute-by-minute analysis; also fallback transcripts (with Whisper) | Installed only if needed, after asking |
 
 ## Install
 
@@ -217,6 +222,7 @@ Claude: Collecting the 15 most viewed and 3 least viewed videos now. When the
 - CTR, average view duration and first-30-second retention cannot be seen on a competitor channel, only on your own.
 - Outlier, VPH, keyword and language-scan steps need a vidIQ account; some video-watching features need a paid plan.
 - The marker lists in `measure_channel_identity.py` are English; edit them for other languages.
+- The minute-by-minute analysis is approximate: at 1 frame per second a hard cut cannot be told from a fade, and cut counts and dB figures are rough, and transitions on a piece boundary are counted twice. It covers one video.
 - Genre counts are rough markers, not verdicts.
 - It is a method for Claude Code, not a hosted service, and tool names such as vidIQ and NexLev may change.
 
