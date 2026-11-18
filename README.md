@@ -10,6 +10,10 @@
 
 **Contents:** [Why](#why-this-exists) · [What makes it different](#what-makes-it-different) · [How it works](#how-it-works) · [What you get](#what-you-get) · [Helper scripts](#helper-scripts) · [Reference](#reference) · [Requirements](#requirements) · [Install](#install) · [Example prompts](#example-prompts) · [Example conversation](#example-conversation) · [FAQ](#faq) · [Limitations](#limitations) · [Credits](#credits) · [License](#license)
 
+## What's new in v1.3.1
+
+- **A5 verification step.** After the thumbnail analysis, a small Claude model compares at least 8 thumbnails with the real images, the strong model recomputes counts and checks the date order, findings are written as observations with a support level, and color codes are not turned into rules.
+
 ## What's new in v1.3.0
 
 - **Thumbnail analysis grows to 20 items (A5).** Gemini inspects the thumbnails in detail, a small Claude model spot-checks, and the analysis adds a hand test, a text test, a table of measurable fields, a chronological style-repetition analysis and a title-to-thumbnail-text mapping table that yields formulas for deriving thumbnail text from a title.
