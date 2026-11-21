@@ -10,6 +10,10 @@
 
 **Contents:** [Two modes](#two-modes-quick-or-deep) · [Why](#why-this-exists) · [What makes it different](#what-makes-it-different) · [How it works](#how-it-works) · [What you get](#what-you-get) · [Helper scripts](#helper-scripts) · [Reference](#reference) · [Requirements](#requirements) · [Install](#install) · [Example prompts](#example-prompts) · [Example conversation](#example-conversation) · [FAQ](#faq) · [Limitations](#limitations) · [Credits](#credits) · [License](#license)
 
+## What's new in v2.0.1
+
+- **A check budget for the deep mode.** Every job gets one chain: a small tool does it, ONE independent check by a different low-level tool, and the main session's final check once. A new check round opens only for a critical finding, non-critical findings go to a "later" list, a revision of the master does not get its own audit, and after 2 independent checks with a critical finding still open the skill stops and asks you. This stops the long chains of repeated checks.
+
 ## What's new in v2.0.0
 
 - **One skill, two modes, chosen first.** The workflow now starts by asking: quick analysis (about 30-40 minutes) or deep analysis? Quick mode fetches the 15 most viewed videos, measures them with code, has ONE agent read them, gives you a one-page yes/no form and writes only your approved rules into the master. Deep mode is the full workflow described below. You can move from quick to deep at any time without starting over; the data already collected is kept.
@@ -166,7 +170,7 @@ flowchart TD
     B2 --> G5{"You fill in the form"}
     G5 --> B5["B5 Checker tools generated per channel + rule matrix + self-test"]
     B5 --> B3["B3 Master prompt written by the strong model"]
-    B3 --> R["B6 Audit round: Python master check + fresh zero-context checker"]
+    B3 --> R["B6 Audit: Python master check + ONE independent zero-context checker"]
     R --> FIX["Fix findings"]
     FIX --> R2{"CRITICAL findings left and fewer than 3 rounds?"}
     R2 -- "yes" --> R
