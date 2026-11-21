@@ -8,7 +8,13 @@
 ![Claude Code skill](https://img.shields.io/badge/Claude%20Code-skill-blueviolet)
 ![Checks: code + independent checker](https://img.shields.io/badge/checks-code%20%2B%20independent%20checker-informational)
 
-**Contents:** [Why](#why-this-exists) · [What makes it different](#what-makes-it-different) · [How it works](#how-it-works) · [What you get](#what-you-get) · [Helper scripts](#helper-scripts) · [Reference](#reference) · [Requirements](#requirements) · [Install](#install) · [Example prompts](#example-prompts) · [Example conversation](#example-conversation) · [FAQ](#faq) · [Limitations](#limitations) · [Credits](#credits) · [License](#license)
+**Contents:** [Two modes](#two-modes-quick-or-deep) · [Why](#why-this-exists) · [What makes it different](#what-makes-it-different) · [How it works](#how-it-works) · [What you get](#what-you-get) · [Helper scripts](#helper-scripts) · [Reference](#reference) · [Requirements](#requirements) · [Install](#install) · [Example prompts](#example-prompts) · [Example conversation](#example-conversation) · [FAQ](#faq) · [Limitations](#limitations) · [Credits](#credits) · [License](#license)
+
+## What's new in v2.0.0
+
+- **One skill, two modes, chosen first.** The workflow now starts by asking: quick analysis (about 30-40 minutes) or deep analysis? Quick mode fetches the 15 most viewed videos, measures them with code, has ONE agent read them, gives you a one-page yes/no form and writes only your approved rules into the master. Deep mode is the full workflow described below. You can move from quick to deep at any time without starting over; the data already collected is kept.
+- **Two new helper scripts** for quick mode: `measure_title_duration.py` (title patterns, durations and views) and `make_quick_form.py` (the yes/no/note form).
+- **Deep mode brought up to date:** a ranked candidate list you choose from (A1b), common and different features across channels (A2d), measurement traps (A2e), the 7 main art-style clusters of thumbnails (A5c), Gemini usage lessons (A5e), a final scan of the master against the analysis (A13), a model rule (small tool does, a different tool checks, the strongest model only with your approval), a rule that the master is not written until the analysis is complete, a credit-free keyword route, and a closeness scan against the competitor.
 
 ## What's new in v1.3.1
 
@@ -26,6 +32,20 @@
 ## What's new in v1.1.0
 
 - **Minute-by-minute video analysis (A6c).** Watch the competitor's most viewed video locally with Gemini CLI (no vidIQ needed): the video is downloaded at 480p, split into pieces of about 4:20, and each piece is turned into a table of time, narration, on-screen content and transition. A three-tier check (frame comparison, sound measured by code, a full read by the strong model) guards it, and the known limits are written down.
+
+## Two modes: quick or deep
+
+The skill asks you first and waits for your answer before it collects anything.
+
+| | Quick | Deep |
+|---|---|---|
+| Time | about 30-40 minutes | the full workflow |
+| Data | the 15 most viewed videos | the 15 most viewed and 3 least viewed, plus thumbnails, scripts, video watching |
+| Reading | ONE agent, checked by a different tool | identity card, 20-item thumbnail analysis, minute-by-minute video watching, reading level, CTAs, language gap, topic scoring |
+| You decide with | a one-page yes/no/note form | approval gates at every major step |
+| Ends with | approved rules written into the master | an audited master prompt (up to 3 rounds) and the channel setup |
+
+Not sure? Start with quick; it is cheap and shows whether a deeper look is worth it. If you say "go deep" later, the data already collected is reused.
 
 ## Why this exists
 
@@ -54,7 +74,54 @@ These are the author's own rules, found by running this analysis on real channel
 
 ## How it works
 
-The workflow has two parts. **Part A** analyzes the competitor, **part B** turns the analysis into an audited master prompt. Purple diamonds are approval gates: nothing moves on without your decision.
+The skill always starts by asking you one question and waits for your answer: **quick or deep?** Purple diamonds are approval gates: nothing moves on without your decision.
+
+### Step 0: choose the mode
+
+```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Georgia, serif","primaryColor":"#1F3026","primaryTextColor":"#C7B3A3","primaryBorderColor":"#8F8E66","lineColor":"#8F8E66","tertiaryTextColor":"#C7B3A3","edgeLabelBackground":"#1F3026"}}}%%
+flowchart TD
+    S0["Start: you give a competitor link and the channel language"] --> Q{"Quick (about 30-40 minutes) or deep?"}
+    Q -- "quick" --> QM["Quick mode: 6 steps, ends with approved rules in the master"]
+    Q -- "deep" --> DM["Deep mode: part A, then part B"]
+    QM -- "you say: go deep" --> DM
+    QM --> OUTQ["Master with only your approved rules"]
+    DM --> OUTD["Audited master prompt and channel setup"]
+    classDef cBase fill:#1F3026,stroke:#8F8E66,color:#C7B3A3,stroke-width:1.5px
+    classDef cGate fill:#582377,stroke:#A3787B,color:#E6D9CC,stroke-width:1.5px
+    classDef cTool fill:#C7B3A3,stroke:#8F8E66,color:#1D0C15,stroke-width:1.5px
+    classDef cOut fill:#77732C,stroke:#C7B3A3,color:#F2E8DD,stroke-width:1.5px
+    class S0,QM,DM cBase
+    class Q cGate
+    class OUTQ,OUTD cOut
+```
+
+### Quick mode: about 30-40 minutes
+
+```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Georgia, serif","primaryColor":"#1F3026","primaryTextColor":"#C7B3A3","primaryBorderColor":"#8F8E66","lineColor":"#8F8E66","tertiaryTextColor":"#C7B3A3","edgeLabelBackground":"#1F3026"}}}%%
+flowchart TD
+    Q1["1 Fetch data by script: the 15 most viewed videos, transcripts, thumbnails"] --> Q2["2 Measure with code: identity, genre curve, title patterns, durations"]
+    Q2 --> Q3["3 ONE agent reads: common and different features, why it worked, 15 rule candidates"]
+    Q3 --> Q4["4 One-page form: Yes, No or Note for every rule"]
+    Q4 --> G{"You decide and paste the result"}
+    G --> Q5["5 The strong model writes only your Yes rules into the master"]
+    Q5 --> Q6["6 ONE independent check by a different tool, then a final check by code"]
+    Q6 --> OUT["Master with approved rules, plus a Later list"]
+    CHECK["Code and a different tool check every agent job"] -.-> Q3
+    CHECK -.-> Q6
+    classDef cBase fill:#1F3026,stroke:#8F8E66,color:#C7B3A3,stroke-width:1.5px
+    classDef cGate fill:#582377,stroke:#A3787B,color:#E6D9CC,stroke-width:1.5px
+    classDef cTool fill:#C7B3A3,stroke:#8F8E66,color:#1D0C15,stroke-width:1.5px
+    classDef cOut fill:#77732C,stroke:#C7B3A3,color:#F2E8DD,stroke-width:1.5px
+    class Q1,Q2,Q3,Q4,Q5,Q6 cBase
+    class G cGate
+    class OUT cOut
+    class CHECK cTool
+```
+
+### Deep mode: part A and part B
+The deep mode has two parts. **Part A** analyzes the competitor, **part B** turns the analysis into an audited master prompt.
 
 ### Part A: analyze the competitor
 
@@ -149,7 +216,7 @@ flowchart LR
 
 ## Helper scripts
 
-The skill ships five scripts in `scripts/`. Run them with `python -I -X utf8`.
+The skill ships seven scripts in `scripts/`. Run them with `python -I -X utf8`.
 
 | Script | What it does |
 |---|---|
@@ -157,6 +224,8 @@ The skill ships five scripts in `scripts/`. Run them with `python -I -X utf8`.
 | `measure_channel_identity.py` | Measures a transcript for the identity card: unique-word ratio, pronoun density, marker densities (lesson, story, analogy, curiosity, caveat), CTA positions in percent, a hook sample and a 10-slice rhythm |
 | `measure_genre_curve.py` | Measures upload frequency, views per day by age, the newer-to-older ratio and the single-video share that hint at the channel's genre |
 | `verify_punctuation_repair.py` | Proves by code that a punctuation repair of a NotebookLM transcript changed no word (the word sequences must be identical) |
+| `measure_title_duration.py` | Quick mode: measures title patterns (digits, "you" address, questions, word and character counts, separators, "how to"), the most common first words and word pairs, and the duration and views distribution |
+| `make_quick_form.py` | Quick mode: turns a JSON list of rule candidates into a one-page HTML form with Yes / No / Note for each rule and a "Copy result" button |
 | `measure_reading_level.py` | On the punctuated transcript: sentence-length ratios, average and longest sentence, unique-word ratio, repeated words and an approximate readability formula (Flesch for English, Wiener Sachtextformel for German) |
 
 Example:
@@ -196,7 +265,8 @@ Or download the folder and place it at `~/.claude/skills/youtube-automation-comp
 
 ## Example prompts
 
-- "Analyze this competitor: https://www.youtube.com/@channel"
+- "Analyze this competitor: https://www.youtube.com/@channel" (the skill asks: quick or deep?)
+- "Quick analysis of this competitor."
 - "New channel analysis, then prepare a master prompt from it."
 - "Which language has a gap for this channel's format?"
 - "Score my topic list by Outlier and VPH against this competitor."
@@ -205,6 +275,9 @@ Or download the folder and place it at `~/.claude/skills/youtube-automation-comp
 
 ```text
 You:    Analyze this competitor: https://www.youtube.com/@channel
+Claude: Quick analysis (about 30-40 minutes) or deep analysis? Not sure? Start
+        with quick, you can go deep later without fetching again.
+You:    Deep.
 Claude: First the identity card, before any scan. I fetched the most viewed
         video's transcript with NotebookLM, read it, and measured it with code:
         the channel looks like a popular-science narrator, not a lesson
@@ -226,6 +299,8 @@ Claude: Collecting the 15 most viewed and 3 least viewed videos now. When the
 
 **Does it copy the competitor?** No. It adapts mechanisms in your own sentences and never takes wording, scenes, titles or thumbnails, and it tells you about the risk of resembling one competitor too closely.
 
+**Quick or deep?** The skill asks first. Quick takes about 30-40 minutes and ends with approved rules in the master; deep is the full workflow. You can switch from quick to deep later and the collected data is reused.
+
 **Can I skip the master prompt?** Yes. Part A (the analysis) stands on its own; part B (the master prompt) starts when you approve the rules list.
 
 ## Limitations
@@ -236,6 +311,7 @@ Claude: Collecting the 15 most viewed and 3 least viewed videos now. When the
 - Outlier, VPH, keyword and language-scan steps need a vidIQ account; some video-watching features need a paid plan.
 - The marker lists in `measure_channel_identity.py` are English; edit them for other languages.
 - The minute-by-minute analysis is approximate: at 1 frame per second a hard cut cannot be told from a fade, and cut counts and dB figures are rough, and transitions on a piece boundary are counted twice. It covers one video.
+- Quick mode rests on one agent reading and a short check, so it gives first signs, not conclusions; the deep mode exists for decisions that need more evidence.
 - Genre counts are rough markers, not verdicts.
 - It is a method for Claude Code, not a hosted service, and tool names such as vidIQ and NexLev may change.
 
