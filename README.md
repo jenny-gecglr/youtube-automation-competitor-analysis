@@ -10,6 +10,11 @@
 
 **Contents:** [Two modes](#two-modes-quick-or-deep) · [Why](#why-this-exists) · [What makes it different](#what-makes-it-different) · [How it works](#how-it-works) · [What you get](#what-you-get) · [Helper scripts](#helper-scripts) · [Reference](#reference) · [Requirements](#requirements) · [Install](#install) · [Example prompts](#example-prompts) · [Example conversation](#example-conversation) · [FAQ](#faq) · [Limitations](#limitations) · [Credits](#credits) · [License](#license)
 
+## What's new in v2.1.0
+
+- **A14: rules and patterns as soon as the analysis is finished.** The assistant measures all of the competitor's videos with Python, makes three lists (rules we take, gaps, what we add to stand out), gets your approval on the rule table, writes the rules into the master and the Python checker, and has the master checked once. After that the competitor is not analyzed again for every video and the fit score comes only from Python.
+- **Python first in the check budget:** anything measurable is checked by Python, an agent looks only at what cannot be measured.
+
 ## What's new in v2.0.1
 
 - **A check budget for the deep mode.** Every job gets one chain: a small tool does it, ONE independent check by a different low-level tool, and the main session's final check once. A new check round opens only for a critical finding, non-critical findings go to a "later" list, a revision of the master does not get its own audit, and after 2 independent checks with a critical finding still open the skill stops and asks you. This stops the long chains of repeated checks.
@@ -47,7 +52,7 @@ The skill asks you first and waits for your answer before it collects anything.
 | Data | the 15 most viewed videos | the 15 most viewed and 3 least viewed, plus thumbnails, scripts, video watching |
 | Reading | ONE agent, checked by a different tool | identity card, 20-item thumbnail analysis, minute-by-minute video watching, reading level, CTAs, language gap, topic scoring |
 | You decide with | a one-page yes/no/note form | approval gates at every major step |
-| Ends with | approved rules written into the master | an audited master prompt (up to 3 rounds) and the channel setup |
+| Ends with | approved rules written into the master | an audited master prompt (one independent audit, a second check only for a critical finding) and the channel setup |
 
 Not sure? Start with quick; it is cheap and shows whether a deeper look is worth it. If you say "go deep" later, the data already collected is reused.
 
@@ -60,7 +65,7 @@ Studying a competitor channel by hand means opening dozens of videos, copying ti
 | Open videos one by one, copy titles and numbers | One script collects the 15 most viewed and 3 least viewed videos: titles, exact views, descriptions, chapters, thumbnails, verbatim transcripts (yt-dlp subtitles as a fallback; gaps are listed, never filled in) |
 | Guess the channel's type from a few videos | A channel identity card with a genre guess (Evergreen, Cashcow, Trend, Hype), evidence, a confidence level and counter-evidence, approved by you before anything else runs |
 | Trust a summary | Everything countable is counted by code; every cheap-tool job is checked by the strong model with a minimum sample and a written "Verification" section |
-| Write a master prompt from memory | The master's questions are pulled out of the competitor's measured values, then the master is written and audited in up to 3 rounds by fresh, zero-context checkers |
+| Write a master prompt from memory | The master's questions are pulled out of the competitor's measured values, then the master is written and audited once by an independent zero-context checker (a second check only for a critical finding, then it asks you) |
 
 ## What makes it different
 
@@ -72,7 +77,7 @@ These are the author's own rules, found by running this analysis on real channel
 - **Two-tier checking saves tokens.** A different cheap tool (Gemini or ChatGPT) or code does the first check from raw data without seeing the claim; the strong model compares a short report instead of reading raw output.
 - **The producer is never the checker.** A pass mark comes only from code output or an independent checker. One wrong sample makes the whole job unreliable.
 - **Transcripts come from NotebookLM, not from paid credits.** A persistent notebook per competitor gives the verbatim text with no model in between.
-- **The master is audited like a script.** The skill tells Claude to build a Python checker calibrated on the competitor's own videos, with a mandatory self-test (the checker is generated per channel, not shipped as a file), and the master goes through up to 3 rounds with a new zero-context checker each time.
+- **The master is audited like a script.** The skill tells Claude to build a Python checker calibrated on the competitor's own videos, with a mandatory self-test (the checker is generated per channel, not shipped as a file), and the master goes through audited once, with a new zero-context checker only for a critical finding that is still open (at most 2 checks, then it asks you).
 - **Two methods for the video, never one.** The minute-by-minute watch is checked against real frames and a sound measurement by code. In the first run, one tool's "music and sound effects" claim was disproved by the measurement.
 - **You keep the creative links.** Titles, thumbnails and hooks stay yours; the agent never rewrites them, and nothing enters the master without approval.
 
@@ -172,8 +177,8 @@ flowchart TD
     B5 --> B3["B3 Master prompt written by the strong model"]
     B3 --> R["B6 Audit: Python master check + ONE independent zero-context checker"]
     R --> FIX["Fix findings"]
-    FIX --> R2{"CRITICAL findings left and fewer than 3 rounds?"}
-    R2 -- "yes" --> R
+    FIX --> R2{"CRITICAL finding still open?"}
+    R2 -- "yes, one more check, then ask you" --> R
     R2 -- "no" --> G6{"You approve the open points"}
     G6 --> M["Master prompt ready"]
     classDef cBase fill:#1F3026,stroke:#8F8E66,color:#C7B3A3,stroke-width:1.5px
@@ -196,7 +201,7 @@ flowchart LR
     W --> C1["2 Python check"]
     C1 --> C2["3 Zero-context compliance check"]
     C2 --> F["4 Surgical fix"]
-    F --> C3["5 Re-check with a new checker, at most 3 rounds"]
+    F --> C3["5 Re-check only for a critical finding, stop and ask after 2 checks"]
     C3 --> O["6 Originality: overlap with earlier scripts and competitor"]
     O --> J["7 Final judge runs the code itself: OK or RED"]
     J --> U{"You approve the script with the check report"}
